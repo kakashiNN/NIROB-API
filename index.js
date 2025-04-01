@@ -1,39 +1,27 @@
-const express = require("express");
-const ytdl = require("ytdl-core");
-const cors = require("cors");
-const fs = require("fs");
+from flask import Flask, request, send_file
+from pytube import YouTube
+from pydub import AudioSegment
+import os
 
-const app = express();
-app.use(cors());
+app = Flask(__name__)
 
-// Read cookies from ck.txt file
-const youtubeCookie = fs.readFileSync("ck.txt", "utf8").trim();
+@app.route('/download', methods=['GET'])
+def download_mp3():
+    url = request.args.get('url')
+    if not url:
+        return "URL parameter is missing", 400
 
-app.get("/download", async (req, res) => {
-    const videoUrl = req.query.url;
-    if (!videoUrl) return res.status(400).json({ error: "URL is required" });
+    yt = YouTube(url)
+    stream = yt.streams.filter(only_audio=True).first()
+    output_file = stream.download()
 
-    try {
-        const info = await ytdl.getInfo(videoUrl, {
-            requestOptions: { headers: { Cookie: youtubeCookie } }
-        });
+    audio = AudioSegment.from_file(output_file)
+    mp3_file = output_file.replace('.mp4', '.mp3')
+    audio.export(mp3_file, format='mp3')
 
-        const title = info.videoDetails.title.replace(/[^\w\s]/gi, "");
-        res.setHeader("Content-Disposition", `attachment; filename="${title}.mp3"`);
-        res.setHeader("Content-Type", "audio/mpeg");
+    os.remove(output_file)
 
-        ytdl(videoUrl, { 
-            filter: "audioonly", 
-            quality: "highestaudio", 
-            requestOptions: { headers: { Cookie: youtubeCookie } }
-        }).pipe(res);
-    } catch (error) {
-        res.status(500).json({ error: "Failed to download audio", details: error.message });
-    }
-});
+    return send_file(mp3_file, as_attachment=True, download_name='download.mp3')
 
-app.get("/", (req, res) => {
-    res.send("YouTube Audio Downloader API is running!");
-});
-
-module.exports = app;
+if __name__ == '__main__':
+    app.run()
