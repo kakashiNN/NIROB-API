@@ -9,8 +9,10 @@ from io import BytesIO
 
 app = FastAPI()
 
-COOKIES_FILE = "cookies.txt"
+# Load cookies from environment variable
+COOKIES_FILE = os.getenv("COOKIES_FILE", None)  # Fetch cookies as environment variable
 
+# Function to download and convert video to MP3
 @app.get("/download")
 async def download_audio(url: str = Query(..., title="YouTube Video URL")):
     if not url:
@@ -18,7 +20,7 @@ async def download_audio(url: str = Query(..., title="YouTube Video URL")):
 
     try:
         # Use Pytube to download the YouTube video
-        yt = YouTube(url)
+        yt = YouTube(url, cookies=COOKIES_FILE)  # Passing cookies for authentication
         video_stream = yt.streams.filter(only_audio=True, file_extension="mp4").first()
         audio_file = video_stream.download(output_path="/tmp", filename="temp_video.mp4")
 
@@ -28,8 +30,11 @@ async def download_audio(url: str = Query(..., title="YouTube Video URL")):
         mp3_file_path = f"/tmp/{unique_filename}"
         audio.export(mp3_file_path, format="mp3")
 
-        # Return the MP3 file URL
-        return JSONResponse(content={"file_url": f"https://your-vercel-app.vercel.app/api/static/{unique_filename}", "message": "Download and conversion successful"})
+        # Return the MP3 file URL (you can store this in a public directory on Vercel)
+        return JSONResponse(content={
+            "file_url": f"https://your-vercel-app.vercel.app/api/static/{unique_filename}",
+            "message": "Download and conversion successful"
+        })
 
     except Exception as e:
         return JSONResponse(content={"error": f"An error occurred: {str(e)}"}, status_code=500)
