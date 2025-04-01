@@ -12,6 +12,10 @@ def download_mp3():
         if not url:
             return jsonify({"error": "URL parameter is missing"}), 400
 
+        # Ensure the URL is a valid YouTube URL
+        if "youtube.com" not in url and "youtu.be" not in url:
+            return jsonify({"error": "Invalid YouTube URL"}), 400
+
         yt = YouTube(url)
         stream = yt.streams.filter(only_audio=True).first()
         output_file = stream.download()
