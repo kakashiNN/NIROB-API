@@ -2,6 +2,7 @@ from flask import Flask, request, send_file, jsonify
 from pytube import YouTube
 from pydub import AudioSegment
 import os
+import re
 
 app = Flask(__name__)
 
@@ -12,11 +13,13 @@ def download_mp3():
         if not url:
             return jsonify({"error": "URL parameter is missing"}), 400
 
-        # Ensure the URL is a valid YouTube URL
-        if "youtube.com" not in url and "youtu.be" not in url:
+        # Extract the base URL of the YouTube video
+        match = re.match(r'(https?://(?:www\.)?youtu\.be/[\w\-]+|https?://(?:www\.)?youtube\.com/watch\?v=[\w\-]+)', url)
+        if not match:
             return jsonify({"error": "Invalid YouTube URL"}), 400
+        video_url = match.group(0)
 
-        yt = YouTube(url)
+        yt = YouTube(video_url)
         stream = yt.streams.filter(only_audio=True).first()
         output_file = stream.download()
 
