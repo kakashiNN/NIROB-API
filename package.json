@@ -2,7 +2,7 @@
   "name": "yt-audio-api",
   "version": "1.0.0",
   "description": "A YouTube audio downloader API that retrieves both audio and title, optimized for Vercel.",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "start": "node server.js",
     "vercel-start": "vercel dev"
