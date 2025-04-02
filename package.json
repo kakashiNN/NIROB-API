@@ -1,23 +1,19 @@
 {
-  "name": "yt-audio-api",
+  "name": "image-api",
   "version": "1.0.0",
-  "description": "A YouTube audio downloader API that retrieves both audio and title, optimized for Vercel.",
+  "description": "Image generation API using DeepAI",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "vercel-start": "vercel dev"
+    "start": "node index.js"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "fs": "^0.0.1-security",
-    "ytdl-core": "^4.11.5"
+    "axios": "^0.21.1",
+    "express": "^4.17.1"
   },
+  "devDependencies": {},
   "engines": {
-    "node": ">=16"
+    "node": "14.x"
   },
-  "author": "Your Name",
-  "license": "MIT",
-  "keywords": []
+  "author": "",
+  "license": "ISC"
 }
