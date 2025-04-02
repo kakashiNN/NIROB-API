@@ -23,9 +23,14 @@ app.get('/mahabub', async (req, res) => {
             headers: { 'api-key': DEEP_AI_API_KEY },
         });
 
-        res.json(response.data);
+        if (response.data && response.data.output_url) {
+            res.json({ image: response.data.output_url });
+        } else {
+            res.status(500).send({ error: 'Unexpected response from DeepAI API.' });
+        }
     } catch (error) {
-        res.status(500).send({ error: 'Failed to process the image.' });
+        console.error('Error:', error.message || error);  // Log the error for debugging
+        res.status(500).send({ error: 'Failed to process the image. Check the logs for more details.' });
     }
 });
 
