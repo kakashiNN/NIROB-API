@@ -1,18 +1,6 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "index.js",
-      "use": "@vercel/node"
-    }
-  ],
   "routes": [
-    {
-      "src": "/api/edit",
-      "dest": "/index.js"
-    }
-  ],
-  "env": {
-    "DEEPAI_API_KEY": "19aac1ea-94a1-497a-8395-8b288032a285"
-  }
+    { "src": "/api/edit", "dest": "/api/edit.js" }
+  ]
 }
