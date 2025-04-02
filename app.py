@@ -9,7 +9,9 @@ app.get('/edit', async (req, res) => {
         if (!url || !prompt) return res.status(400).json({ error: 'Missing url or prompt' });
 
         // DeepAI API key (replace with your own)
-        const apiKey = 'YOUR_DEEPAI_API_KEY';
+        const apiKey = '19aac1ea-94a1-497a-8395-8b288032a285
+
+';
 
         // Make a request to DeepAI Text-to-Image API
         const response = await axios.post('https://api.deepai.org/api/text2img', 
