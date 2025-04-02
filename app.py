@@ -1,37 +1,31 @@
-from flask import Flask, request, send_file, jsonify
-from pytube import YouTube
-from pydub import AudioSegment
-import os
-import re
+const express = require('express');
+const axios = require('axios');
+const app = express();
+const PORT = 3000;
 
-app = Flask(__name__)
+app.get('/edit', async (req, res) => {
+    try {
+        const { url, prompt } = req.query;
+        if (!url || !prompt) return res.status(400).json({ error: 'Missing url or prompt' });
 
-@app.route('/download', methods=['GET'])
-def download_mp3():
-    try:
-        url = request.args.get('url')
-        if not url:
-            return jsonify({"error": "URL parameter is missing"}), 400
+        // DeepAI API key (replace with your own)
+        const apiKey = 'YOUR_DEEPAI_API_KEY';
 
-        # Extract the base URL of the YouTube video
-        match = re.match(r'(https?://(?:www\.)?youtu\.be/[\w\-]+|https?://(?:www\.)?youtube\.com/watch\?v=[\w\-]+)', url)
-        if not match:
-            return jsonify({"error": "Invalid YouTube URL"}), 400
-        video_url = match.group(0)
+        // Make a request to DeepAI Text-to-Image API
+        const response = await axios.post('https://api.deepai.org/api/text2img', 
+            { text: prompt },
+            { headers: { 'api-key': apiKey } }
+        );
 
-        yt = YouTube(video_url)
-        stream = yt.streams.filter(only_audio=True).first()
-        output_file = stream.download()
+        // The API will return a URL to the generated image
+        const generatedImageUrl = response.data.output_url;
 
-        audio = AudioSegment.from_file(output_file)
-        mp3_file = output_file.replace('.mp4', '.mp3')
-        audio.export(mp3_file, format='mp3')
+        // Send the generated image URL as the response
+        res.json({ image_url: generatedImageUrl });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to generate image' });
+    }
+});
 
-        os.remove(output_file)
-
-        return send_file(mp3_file, as_attachment=True, download_name='download.mp3')
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-if __name__ == '__main__':
-    app.run()
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
