@@ -12,7 +12,10 @@ app.get('/mahabub', async (req, res) => {
     const { url, prompt } = req.query;
 
     if (!url || !prompt) {
-        return res.status(400).send({ error: 'Both image URL and prompt are required.' });
+        return res.status(400).send({
+            status: 'unsuccessful',
+            message: 'Both image URL and prompt are required.'
+        });
     }
 
     try {
@@ -24,13 +27,27 @@ app.get('/mahabub', async (req, res) => {
         });
 
         if (response.data && response.data.output_url) {
-            res.json({ image: response.data.output_url });
+            const output = {
+                status: "successful",
+                url: response.data.output_url, // DeepAI generated image URL
+                author: {
+                    OWNER: "MR᭄﹅ MAHABUB﹅ メꪜ",
+                    FACEBOOK: "https://www.facebook.com/www.xnxx.com140"
+                }
+            };
+            res.json(output);
         } else {
-            res.status(500).send({ error: 'Unexpected response from DeepAI API.' });
+            res.status(500).send({
+                status: 'unsuccessful',
+                message: 'Unexpected response from DeepAI API.'
+            });
         }
     } catch (error) {
-        console.error('Error:', error.message || error);  // Log the error for debugging
-        res.status(500).send({ error: 'Failed to process the image. Check the logs for more details.' });
+        console.error('Error processing the image:', error.message || error);
+        res.status(500).send({
+            status: 'unsuccessful',
+            message: 'Failed to process the image. Check the logs for more details.'
+        });
     }
 });
 
