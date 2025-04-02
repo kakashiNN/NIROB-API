@@ -1,19 +1,12 @@
 {
-  "name": "image-api",
+  "name": "image-modify-api",
   "version": "1.0.0",
-  "description": "Image generation API using DeepAI",
-  "main": "index.js",
+  "description": "An API to modify images using DeepAI on Vercel",
+  "main": "api/edit.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "vercel dev"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "express": "^4.17.1"
-  },
-  "devDependencies": {},
-  "engines": {
-    "node": "14.x"
-  },
-  "author": "",
-  "license": "ISC"
+    "axios": "^1.5.0"
+  }
 }
