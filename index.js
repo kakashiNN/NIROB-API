@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Replace with your DeepAI API Key
-const DEEP_AI_API_KEY = 'your-deepai-api-key';
+const DEEP_AI_API_KEY = '814425f0-9739-4d36-a8a8-94898630fb03';
 
 app.use(express.json());
 
