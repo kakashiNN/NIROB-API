@@ -1,28 +1,23 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.get('/edit', async (req, res) => {
     try {
         const { url, prompt } = req.query;
         if (!url || !prompt) return res.status(400).json({ error: 'Missing url or prompt' });
 
-        // DeepAI API key (replace with your own)
-        const apiKey = '19aac1ea-94a1-497a-8395-8b288032a285
+        // DeepAI API key (stored as an environment variable)
+        const apiKey = process.env.DEEPAI_API_KEY;
 
-';
-
-        // Make a request to DeepAI Text-to-Image API
         const response = await axios.post('https://api.deepai.org/api/text2img', 
             { text: prompt },
             { headers: { 'api-key': apiKey } }
         );
 
-        // The API will return a URL to the generated image
         const generatedImageUrl = response.data.output_url;
 
-        // Send the generated image URL as the response
         res.json({ image_url: generatedImageUrl });
     } catch (error) {
         console.error(error);
