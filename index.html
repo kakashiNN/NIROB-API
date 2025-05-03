@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Google Drive Uploader</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f5f5f5;
+      text-align: center;
+      padding: 30px;
+    }
+
+    #uploadBox {
+      border: 2px dashed #999;
+      padding: 40px;
+      border-radius: 10px;
+      background: #fff;
+      color: #555;
+      cursor: pointer;
+    }
+
+    #output {
+      margin-top: 20px;
+      font-size: 16px;
+      color: green;
+    }
+
+    #uploadBox:hover {
+      background-color: #eef;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Upload Photo/Video & Get Google Drive Link</h2>
+
+  <div id="uploadBox" onclick="document.getElementById('fileInput').click();">
+    Tap Here to Select a File
+    <input type="file" id="fileInput" />
+  </div>
+
+  <div id="output"></div>
+
+  <script>
+    let apiBaseUrl = "";
+
+    // Load API URL from JSON
+    fetch("https://raw.githubusercontent.com/MR-MAHABUB-004/MAHABUB-BOT-STORAGE/refs/heads/main/APIURL.json")
+      .then(res => res.json())
+      .then(data => apiBaseUrl = data["Google Drive"]);
+
+    document.getElementById('fileInput').addEventListener('change', async function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      document.getElementById('output').textContent = "Uploading...";
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const tempRes = await fetch("https://file.io", {
+          method: "POST",
+          body: formData
+        });
+
+        const tempData = await tempRes.json();
+        if (!tempData.success) {
+          document.getElementById('output').textContent = "Upload to file.io failed.";
+          return;
+        }
+
+        const uploadUrl = tempData.link;
+
+        const apiRes = await fetch(`${apiBaseUrl}?url=${encodeURIComponent(uploadUrl)}`);
+        const result = await apiRes.json();
+
+        if (result.success && result.directLink) {
+          document.getElementById('output').innerHTML = `
+            <p><strong>Owner:</strong> ${result.Owner}</p>
+            <p><strong>Mime Type:</strong> ${result.mimeType}</p>
+            <p><strong>Download Link:</strong><br>
+            <a href="${result.directLink}" target="_blank">${result.directLink}</a></p>
+          `;
+        } else {
+          document.getElementById('output').textContent = "API failed to return direct link.";
+        }
+
+      } catch (e) {
+        document.getElementById('output').textContent = "Something went wrong.";
+        console.error(e);
+      }
+    });
+  </script>
+
+</body>
+</html>
