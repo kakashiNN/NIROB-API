@@ -73,6 +73,10 @@
         const uploadUrl = tempData.link;
 
         const apiRes = await fetch(`${apiBaseUrl}?url=${encodeURIComponent(uploadUrl)}`);
+        if (!apiRes.ok) {
+          throw new Error(`API request failed with status: ${apiRes.status}`);
+        }
+        
         const result = await apiRes.json();
 
         if (result.success && result.directLink) {
@@ -87,8 +91,8 @@
         }
 
       } catch (e) {
-        document.getElementById('output').textContent = "Something went wrong: " + e.message;
-        console.error("Error:", e);
+        document.getElementById('output').textContent = `Something went wrong: ${e.message}`;
+        console.error("Error details:", e);
       }
     });
   </script>
