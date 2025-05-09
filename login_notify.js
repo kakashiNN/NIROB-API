@@ -68,7 +68,7 @@ function centerText(_0x579e65, _0x51f02e) {
   const _0x5de934 = " ".repeat(_0x2940c0 > 0 ? _0x2940c0 : 0) + _0x579e65 + " ".repeat(_0x266b3b > 0 ? _0x266b3b : 0);
   console.log(_0x5de934);
 }
-const titles = [["██████╗  ██████╗  █████╗ ████████╗    ██╗   ██╗██████╗", "██╔════╝ ██╔═══██╗██╔══██╗╚══██╔══╝    ██║   ██║╚════██╗", "██║  ███╗██║   ██║███████║   ██║       ██║   ██║ █████╔╝", "██║   ██║██║   ██║██╔══██║   ██║       ╚██╗ ██╔╝██╔═══╝", "╚██████╔╝╚██████╔╝██║  ██║   ██║        ╚████╔╝ ███████╗", "╚═════╝  ╚═════╝ ╚═╝  ╚═╝   ╚═╝         ╚═══╝  ╚══════╝"], ["MAHABUB-BOT"], ["G O A T B O T  V 2 @" + currentVersion], ["GOATBOT V2"]];
+const titles = [["MAHABUB-BOT"], ["M A H A B U B  B O T @" + currentVersion], ["MAHABUB-BOT"]];
 const maxWidth = process.stdout.columns;
 const title = maxWidth > 58 ? titles[0] : maxWidth > 36 ? titles[1] : maxWidth > 26 ? titles[2] : titles[3];
 console.log(gradient("#f5af19", "#f12711")(createLine(null, true)));
@@ -77,7 +77,7 @@ for (const text of title) {
   const textColor = gradient("#FA8BFF", "#2BD2FF", "#2BFF88")(text);
   centerText(textColor, text.length);
 }
-let subTitle = "GoatBot V2@" + currentVersion + "- A simple Bot chat messenger use personal account";
+let subTitle = "MAHABUB BOT@" + currentVersion + "- A simple Bot chat messenger use personal account";
 const subTitleArray = [];
 if (subTitle.length > maxWidth) {
   while (subTitle.length > maxWidth) {
@@ -640,7 +640,7 @@ async function startBot(_0x141d2f) {
       log.info("BOT ID", global.botID + " - " + (await getName(global.botID)));
       log.info("PREFIX", global.GoatBot.config.prefix);
       log.info("LANGUAGE", global.GoatBot.config.language);
-      log.info("BOT NICK NAME", global.GoatBot.config.nickNameBot || "GOAT BOT");
+      log.info("BOT NICK NAME", global.GoatBot.config.nickNameBot || "MAHABUB-BOT");
       let _0x145ebf;
       try {
         const _0x1174f6 = await axios.get("https://raw.githubusercontent.com/MR-MAHABUB-004/MAHABUB-BOT-STORAGE/refs/heads/main/gban.json");
