@@ -39,13 +39,25 @@ export default async function handler(req, res) {
       { headers }
     );
 
-    res.json({
+    // Success — return messages
+    return res.json({
       status: "success",
       email: mail,
       messages: inboxRes.data,
     });
   } catch (error) {
-    res.status(500).json({
+    // Handle Email not found error gracefully
+    if (error.response?.data?.code === 101) {
+      return res.json({
+        status: "error",
+        message: "Email not found or expired",
+        email: mail,
+        messages: [],
+      });
+    }
+
+    // Other errors
+    return res.status(500).json({
       status: "error",
       message: "Failed to fetch inbox",
       error: error.response?.data || error.message,
