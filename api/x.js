@@ -46,6 +46,7 @@ export default async function handler(req, res) {
     }
 
     const filtered = {
+      author: "IMRAN AHMED",
       title: data.title || null,
       thumbnail: data.img || null,
       videos: data.videos.map(v => ({
