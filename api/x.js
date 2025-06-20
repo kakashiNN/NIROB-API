@@ -17,6 +17,7 @@ export default async function handler(req, res) {
         app_id: 'pornhub_downloader'
       },
       {
+        timeout: 8000, // 8 seconds timeout to avoid Vercel 504
         headers: {
           'authority': 'xxx.xxvid.download',
           'accept': '*/*',
@@ -35,26 +36,37 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = response.data.data;
+    const data = response?.data?.data;
+
+    if (!data || !data.videos) {
+      return res.status(502).json({
+        status: "error",
+        message: "Failed to retrieve valid video data"
+      });
+    }
 
     const filtered = {
-      author: "MR᭄﹅ MAHABUB﹅ メꪜ ",
       title: data.title || null,
       thumbnail: data.img || null,
-      videos: (data.videos || []).map(video => ({
-        quality: video.quality,
-        url: video.url
+      videos: data.videos.map(v => ({
+        quality: v.quality,
+        url: v.url
       }))
     };
 
-    res.status(200).json(filtered);
+    return res.status(200).json(filtered);
 
   } catch (error) {
-    console.error("API error:", error.message);
-    res.status(500).json({
+    const msg = error.code === 'ECONNABORTED'
+      ? "Request timeout: source site too slow or unreachable"
+      : error.message;
+
+    console.error("API fetch error:", msg);
+
+    return res.status(500).json({
       status: "error",
       message: "Failed to fetch video info",
-      error: error.message
+      error: msg
     });
   }
 }
