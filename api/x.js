@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         app_id: 'pornhub_downloader'
       },
       {
-        timeout: 12000, // 8 seconds timeout to avoid Vercel 504
+        timeout: 9000, // 8 seconds timeout to avoid Vercel 504
         headers: {
           'authority': 'xxx.xxvid.download',
           'accept': '*/*',
