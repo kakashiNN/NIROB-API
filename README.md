@@ -15,3 +15,34 @@ This is a simple Node.js API built with **Next.js API routes** (or Express-compa
 ---
 
 ## 📂 Project Structure
+
+
+---
+
+## 🔧 Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/your-username/pornhub-downloader-api.git
+   cd pornhub-downloader-api
+
+##Endpoint 
+   ```GET /api/handler?url=<video-url>```
+
+## Response
+  ``` {
+  "author": "IMRAN AHMED",
+  "title": "Sample Video Title",
+  "thumbnail": "https://cdn.phncdn.com/videos/2025/09/28/sample.jpg",
+  "videos": [
+    {
+      "quality": "720p",
+      "url": "https://cdn.phncdn.com/video720.mp4"
+    },
+    {
+      "quality": "480p",
+      "url": "https://cdn.phncdn.com/video480.mp4"
+    }
+  ]
+}```
+
