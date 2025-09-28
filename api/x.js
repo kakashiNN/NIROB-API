@@ -1,4 +1,4 @@
-// api/x.js
+
 import axios from "axios";
 
 export default async function handler(req, res) {
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         app_id: 'pornhub_downloader'
       },
       {
-        timeout: 9000, // 8 seconds timeout to avoid Vercel 504
+        timeout: 10000,
         headers: {
           'authority': 'xxx.xxvid.download',
           'accept': '*/*',
